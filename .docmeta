@@ -1,0 +1,4 @@
+-
+    type: markdown
+    input-files: README.md
+    output-page: Main
