@@ -51,7 +51,7 @@ local function HideTooltip(element)
 end
 
 local function Update(self, event, unit)
-	if (self.unit ~= unit) then return end
+	if (unit and unit ~= self.unit) then return end
 
 	local element = self.ArtifactPower
 	--[[ :PreUpdate(event)
@@ -161,7 +161,7 @@ local function Enable(self, unit)
 		element:SetScript("OnLeave", element.OnLeave or HideTooltip)
 	end
 
-	self:RegisterEvent("ARTIFACT_XP_UPDATE", Path)
+	self:RegisterEvent("ARTIFACT_XP_UPDATE", Path, true)
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED", Path)
 
 	return true
