@@ -161,8 +161,12 @@ local function Enable(self, unit)
 		element.onAlpha = element.onAlpha or 1
 		element.offAlpha = element.offAlpha or 1
 		element:SetAlpha(element.offAlpha)
-		element:SetScript("OnEnter", element.OnEnter or ShowTooltip)
-		element:SetScript("OnLeave", element.OnLeave or HideTooltip)
+		if (not element:GetScript("OnEnter")) then
+			element:SetScript("OnEnter", element.OnEnter or ShowTooltip)
+		end
+		if (not element:GetScript("OnLeave")) then
+			element:SetScript("OnLeave", element.OnLeave or HideTooltip)
+		end
 	end
 
 	self:RegisterEvent("ARTIFACT_XP_UPDATE", Path, true)
