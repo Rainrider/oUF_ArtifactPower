@@ -1,36 +1,85 @@
---[[ Element: ArtifactPower
+--[[
 
- Handles visibility and updating the artifact power bar.
+# Element: ArtifactPower
 
- Widget
+Handles visibility and updating the artifact power bar.
 
- ArtifactPower - A status bar to represent the artifact power bar.
+### Widget
 
- Options
+`ArtifactPower` - A status bar to represent the artifact power bar.
 
- .onAlpha  - alpha value of the widget when it is mouse enabled and hovered.
- .offAlpha - alpha value of the widget when it is mouse enabled and not hovered.
+### Options
 
- Notes
+  - `.onAlpha` - alpha value of the widget when it is mouse enabled and hovered.
+  - `.offAlpha` - alpha value of the widget when it is mouse enabled and not hovered.
 
- OnEnter and OnLeave handlers to display a tooltip will be set on the widget if
- it is mouse enabled.
+### Notes
 
- Examples
+`OnEnter` and `OnLeave` handlers to display a tooltip will be set on the widget if it is mouse enabled.
 
-   -- Position and size
-   local ArtifactPower = CreateFrame("StatusBar", nil, self)
-   ArtifactPower:SetSize(200, 5)
-   ArtifactPower:SetPoint("TOP", self, "BOTTOM")
+### Examples
 
-   -- Enable the tooltip
-   ArtifactPower:EnableMouse(true)
+```lua
+-- Position and size
+local ArtifactPower = CreateFrame("StatusBar", nil, self)
+ArtifactPower:SetSize(200, 5)
+ArtifactPower:SetPoint("TOP", self, "BOTTOM")
 
-   -- Register with oUF
-   self.ArtifactPower = ArtifactPower
+-- Enable the tooltip
+ArtifactPower:EnableMouse(true)
 
- Callbacks
-]]
+-- Register with oUF
+self.ArtifactPower = ArtifactPower
+```
+
+### Callbacks
+
+#### `:PreUpdate(event)`
+
+Called before the element has been updated.
+
+**Arguments**
+
+  1. `self`- the ArtifactPower element.
+  2. `event` - the event that triggered the update.
+
+#### `:PostUpdate(event, show)`
+
+Called after the element has been updated.
+
+**Arguments**
+
+  1. `self`- the ArtifactPower element.
+  2. `event`- the event that triggered the update.
+  3. `show`- true if the element is shown, false else.
+
+### Hooks
+
+#### `Override(self, ...)`
+
+Used to completely override the internal update function. Removing the table key entry will make the element fall-back to its internal function again.
+
+**Arguments**
+
+  1. `self` - the parent of the ArtifactPower widget.
+  2. `...` - the event that triggered the update and the unit that the event was fired for.
+
+#### `OnEnter(self)`
+
+The OnEnter script handler when the element is mouse enabled.
+
+**Arguments**
+
+  1. `self` - the ArtifactPower element.
+
+#### `OnLeave(self)`
+
+The OnLeave script handler when the element is mouse enabled.
+
+**Arguments**
+
+  1. `self` - the ArtifactPower element.
+--]]
 
 local _, ns = ...
 local oUF = ns.oUF or oUF
@@ -54,14 +103,6 @@ local function Update(self, event, unit)
 	if (unit and unit ~= self.unit) then return end
 
 	local element = self.ArtifactPower
-	--[[ :PreUpdate(event)
-	 Called before the element has been updated.
-
-	 Arguments
-
-	 self  - the ArtifactPower element.
-	 event - the event that triggered the update.
-	]]
 	if (element.PreUpdate) then element:PreUpdate(event) end
 
 	local show = HasArtifactEquipped() and not UnitHasVehicleUI("player")
@@ -91,32 +132,11 @@ local function Update(self, event, unit)
 		element:Hide()
 	end
 
-	--[[ :PostUpdate(event, show)
-
-	 Called after the element has been updated.
-
-	 Arguments
-
-	 self  - the ArtifactPower element.
-	 event - the event that triggered the update.
-	 show  - true if the element is shown, false else.
-	]]
 	if (element.PostUpdate) then
 		return element:PostUpdate(event, show)
 	end
 end
 
---[[ Hooks
- Override(self, ...) - Used to completely override the internal update function.
-                       Removing the table key entry will make the element fall-back
-                       to its internal function again.
-
- Arguments
-
- self - the parent of the ArtifactPower widget
- ...  - the event that triggered the update and the unit that the
-        event was fired for
-]]
 local function Path(self, ...)
 	return (self.ArtifactPower.Override or Update)(self, ...)
 end
@@ -141,23 +161,7 @@ local function Enable(self, unit)
 		element.onAlpha = element.onAlpha or 1
 		element.offAlpha = element.offAlpha or 1
 		element:SetAlpha(element.offAlpha)
-		--[[ OnEnter(self)
-
-		 The OnEnter script handler when the element is mouse enabled.
-
-		 Arguments
-
-		 self - the ArtifactPower element.
-		]]
 		element:SetScript("OnEnter", element.OnEnter or ShowTooltip)
-		--[[ OnLeave(self)
-
-		 The OnLeave script handler when the element is mouse enabled.
-
-		 Arguments
-
-		 self - the ArtifactPower element.
-		]]
 		element:SetScript("OnLeave", element.OnLeave or HideTooltip)
 	end
 
