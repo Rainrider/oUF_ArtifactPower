@@ -1,90 +1,46 @@
 --[[
-
 # Element: ArtifactPower
 
-Handles visibility and updating the artifact power bar.
+Handles updating and visibility of a status bar that displays the player's artifact power.
 
-### Widget
+## Widget
 
-`ArtifactPower` - A status bar to represent the artifact power bar.
+ArtifactPower - a `StatusBar` used to display the player's artifact power
 
-### Options
+## Options
 
-  - `.onAlpha` - alpha value of the widget when it is mouse enabled and hovered.
-  - `.offAlpha` - alpha value of the widget when it is mouse enabled and not hovered.
+.onAlpha  - alpha value of the widget when it is mouse-enabled and hovered (number [0-1])
+.offAlpha - alpha value of the widget when it is mouse-enabled and not hovered (number [0-1])
 
-### Notes
+## Notes
 
-`OnEnter` and `OnLeave` handlers to display a tooltip will be set on the widget if it is mouse enabled.
+A default texture will be applied if the widget is a `StatusBar` and doesn't have a texture or color set.
+`OnEnter` and `OnLeave` handlers to display a tooltip will be set on the widget, if it is mouse-enabled and the scripts
+are not set by the layout.
 
-### Examples
+## Examples
 
-```lua
--- Position and size
-local ArtifactPower = CreateFrame("StatusBar", nil, self)
-ArtifactPower:SetSize(200, 5)
-ArtifactPower:SetPoint("TOP", self, "BOTTOM")
+    -- Position and size
+    local ArtifactPower = CreateFrame("StatusBar", nil, self)
+    ArtifactPower:SetSize(200, 5)
+    ArtifactPower:SetPoint("TOP", self, "BOTTOM")
 
--- Enable the tooltip
-ArtifactPower:EnableMouse(true)
+    -- Enable the tooltip
+    ArtifactPower:EnableMouse(true)
 
--- Register with oUF
-self.ArtifactPower = ArtifactPower
-```
-
-### Callbacks
-
-#### `:PreUpdate(event)`
-
-Called before the element has been updated.
-
-**Arguments**
-
-  1. `self`- the ArtifactPower element.
-  2. `event` - the event that triggered the update.
-
-#### `:PostUpdate(event, show)`
-
-Called after the element has been updated.
-
-**Arguments**
-
-  1. `self`- the ArtifactPower element.
-  2. `event`- the event that triggered the update.
-  3. `show`- true if the element is shown, false else.
-
-### Hooks
-
-#### `Override(self, ...)`
-
-Used to completely override the internal update function. Removing the table key entry will make the element fall-back to its internal function again.
-
-**Arguments**
-
-  1. `self` - the parent of the ArtifactPower widget.
-  2. `...` - the event that triggered the update and the unit that the event was fired for.
-
-#### `OnEnter(self)`
-
-The OnEnter script handler when the element is mouse enabled.
-
-**Arguments**
-
-  1. `self` - the ArtifactPower element.
-
-#### `OnLeave(self)`
-
-The OnLeave script handler when the element is mouse enabled.
-
-**Arguments**
-
-  1. `self` - the ArtifactPower element.
+    -- Register with oUF
+    self.ArtifactPower = ArtifactPower
 --]]
 
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
-local function ShowTooltip(element)
+--[[ Override: ArtifactPower:OnEnter()
+Called when the mouse cursor enters the widget's interactive area.
+
+* self - the ArtifactPower widget (StatusBar)
+--]]
+local function OnEnter(element)
 	element:SetAlpha(element.onAlpha)
 	GameTooltip:SetOwner(element)
 	GameTooltip:SetText(element.name, HIGHLIGHT_FONT_COLOR:GetRGB())
@@ -94,7 +50,12 @@ local function ShowTooltip(element)
 	GameTooltip:Show()
 end
 
-local function HideTooltip(element)
+--[[ Override: ArtifactPower:OnEnter()
+Called when the mouse cursor leaves the widget's interactive area.
+
+* self - the ArtifactPower widget (StatusBar)
+--]]
+local function OnLeave(element)
 	element:SetAlpha(element.offAlpha)
 	GameTooltip_Hide()
 end
@@ -103,9 +64,15 @@ local function Update(self, event, unit)
 	if (unit and unit ~= self.unit) then return end
 
 	local element = self.ArtifactPower
+	--[[ Callback: ArtifactPower:PreUpdate(event)
+	Called before the element has been updated.
+
+	* self  - the ArtifactPower widget (StatusBar)
+	* event - the event that triggered the update (string)
+	--]]
 	if (element.PreUpdate) then element:PreUpdate(event) end
 
-	local show = HasArtifactEquipped() and not UnitHasVehicleUI("player")
+	local show = HasArtifactEquipped() and not UnitHasVehicleUI('player')
 	if (show) then
 		local _, _, name, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local numTraitsLearnable, power, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier);
@@ -133,27 +100,41 @@ local function Update(self, event, unit)
 		element:Hide()
 	end
 
+	--[[ Callback: ArtifactPower:PostUpdate(event, show)
+	Called after the element has been updated.
+
+	* self  - the ArtifactPower widget (StatusBar)
+	* event - the event that triggered the update (string)
+	* show  - true if the element is shown, false else (boolean)
+	--]]
 	if (element.PostUpdate) then
 		return element:PostUpdate(event, show)
 	end
 end
 
 local function Path(self, ...)
+	--[[ Override: ArtifactPower:Override(event, ...)
+	Used to completely override the element's update process.
+
+	* self  - the ArtifactPower widget
+	* event - the event that triggered the update
+	* ...   - the arguments accompanying the event
+	--]]
 	return (self.ArtifactPower.Override or Update)(self, ...)
 end
 
 local function ForceUpdate(element)
-	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
+	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
 local function Enable(self, unit)
 	local element = self.ArtifactPower
-	if (not element or unit ~= "player") then return end
+	if (not element or unit ~= 'player') then return end
 
 	element.__owner = self
 	element.ForceUpdate = ForceUpdate
 
-	if (not element:GetStatusBarTexture()) then
+	if (element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 		element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		element:SetStatusBarColor(.901, .8, .601)
 	end
@@ -162,16 +143,16 @@ local function Enable(self, unit)
 		element.onAlpha = element.onAlpha or 1
 		element.offAlpha = element.offAlpha or 1
 		element:SetAlpha(element.offAlpha)
-		if (not element:GetScript("OnEnter")) then
-			element:SetScript("OnEnter", element.OnEnter or ShowTooltip)
+		if (not element:GetScript('OnEnter')) then
+			element:SetScript('OnEnter', element.OnEnter or OnEnter)
 		end
-		if (not element:GetScript("OnLeave")) then
-			element:SetScript("OnLeave", element.OnLeave or HideTooltip)
+		if (not element:GetScript('OnLeave')) then
+			element:SetScript('OnLeave', element.OnLeave or OnLeave)
 		end
 	end
 
-	self:RegisterEvent("ARTIFACT_XP_UPDATE", Path, true)
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", Path)
+	self:RegisterEvent('ARTIFACT_XP_UPDATE', Path, true)
+	self:RegisterEvent('UNIT_INVENTORY_CHANGED', Path)
 
 	return true
 end
@@ -180,9 +161,9 @@ local function Disable(self)
 	local element = self.ArtifactPower
 	if (not element) then return end
 
-	self:UnregisterEvent("ARTIFACT_XP_UPDATE", Path)
-	self:UnregisterEvent("UNIT_INVENTORY_CHANGED", Path)
+	self:UnregisterEvent('ARTIFACT_XP_UPDATE', Path)
+	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', Path)
 	element:Hide()
 end
 
-oUF:AddElement("ArtifactPower", Path, Enable, Disable)
+oUF:AddElement('ArtifactPower', Path, Enable, Disable)
