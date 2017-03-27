@@ -90,13 +90,6 @@ local function Update(self, event, unit)
 
 		element:Show()
 	else
-		element.name = nil
-		element.power = nil
-		element.powerForNextTrait = nil
-		element.totalPower = nil
-		element.numTraitsLearnable = nil
-		element.traitsLearned = nil
-
 		element:Hide()
 	end
 
