@@ -9,8 +9,9 @@ ArtifactPower - a `StatusBar` used to display the player's artifact power
 
 ## Options
 
-.onAlpha  - alpha value of the widget when it is mouse-enabled and hovered (number [0-1])
-.offAlpha - alpha value of the widget when it is mouse-enabled and not hovered (number [0-1])
+.onAlpha       - alpha value of the widget when it is mouse-enabled and hovered. Defaults to 1 (number)[0-1]
+.offAlpha      - alpha value of the widget when it is mouse-enabled and not hovered. Defaults to 1 (number)[0-1]
+.tooltipAnchor - anchor point for the tooltip. Defaults to 'ANCHOR_BOTTOMRIGHT' (string)
 
 ## Notes
 
@@ -42,7 +43,7 @@ Called when the mouse cursor enters the widget's interactive area.
 --]]
 local function OnEnter(element)
 	element:SetAlpha(element.onAlpha)
-	GameTooltip:SetOwner(element)
+	GameTooltip:SetOwner(element, element.tooltipAnchor)
 	GameTooltip:SetText(element.name, HIGHLIGHT_FONT_COLOR:GetRGB())
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(AbbreviateNumbers(element.totalPower),
@@ -136,6 +137,7 @@ local function Enable(self, unit)
 	end
 
 	if (element:IsMouseEnabled()) then
+		element.tooltipAnchor = element.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
 		element.onAlpha = element.onAlpha or 1
 		element.offAlpha = element.offAlpha or 1
 		element:SetAlpha(element.offAlpha)
