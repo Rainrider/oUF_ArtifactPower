@@ -45,7 +45,10 @@ local function OnEnter(element)
 	GameTooltip:SetOwner(element)
 	GameTooltip:SetText(element.name, HIGHLIGHT_FONT_COLOR:GetRGB())
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(element.totalPower, element.power, element.powerForNextTrait), nil, nil, nil, true)
+	GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(AbbreviateNumbers(element.totalPower),
+	                                                        AbbreviateNumbers(element.power),
+	                                                        AbbreviateNumbers(element.powerForNextTrait)),
+	                    nil, nil, nil, true)
 	GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_BODY:format(element.numTraitsLearnable), nil, nil, nil, true)
 	GameTooltip:Show()
 end
