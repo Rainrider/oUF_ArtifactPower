@@ -13,10 +13,20 @@ ArtifactPower - a `StatusBar` used to display the player's artifact power
 .offAlpha      - alpha value of the widget when it is mouse-enabled and not hovered. Defaults to 1 (number)[0-1]
 .tooltipAnchor - anchor point for the tooltip. Defaults to 'ANCHOR_BOTTOMRIGHT' (string)
 
+## Attributes
+
+.name               - the name of the currently equipped artifact (string)
+.power              - the amount of artifact power earned towards the next artifact trait (number)
+.powerForNextTrait  - the amount of artifact power needed for the next artifact trait (number)
+.totalPower         - the total amount of unspent artifact power (number)
+.numTraitsLearnable - the number of traits that could be purchased with the current amount of unspent artifact power (number)
+.traitsLearned      - the number of purchased traits (number)
+.tier               - the current artifact tier (number)
+
 ## Notes
 
 A default texture will be applied if the widget is a `StatusBar` and doesn't have a texture or color set.
-`OnEnter` and `OnLeave` handlers to display a tooltip will be set on the widget, if it is mouse-enabled and the scripts
+`OnEnter` and `OnLeave` handlers to display a tooltip will be set on the widget if it is mouse-enabled and the scripts
 are not set by the layout.
 
 ## Examples
