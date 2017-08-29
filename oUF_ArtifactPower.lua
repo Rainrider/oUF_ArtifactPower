@@ -46,6 +46,62 @@ are not set by the layout.
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
+for tag, func in next, {
+	['artifactpower:name'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, name = C_ArtifactUI.GetEquippedArtifactInfo()
+		return name
+	end,
+	['artifactpower:power'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
+		local _, power = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier)
+		return power
+	end,
+	['artifactpower:until_next'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
+		local _, power, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier)
+		return AbbreviateLargeNumbers(powerForNextTrait - power)
+	end,
+	['artifactpower:until_next_per'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
+		local _, power, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier)
+		return floor(((power/powerForNextTrait)*100) + 0.5)
+	end,
+	['artifactpower:next_trait_cost'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
+		local _, _, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier)
+		return powerForNextTrait
+	end,
+	['artifactpower:total'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, totalPower = C_ArtifactUI.GetEquippedArtifactInfo()
+		return totalPower
+	end,
+	['artifactpower:traits_learnable'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
+		local numTraitsLearnable = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier)
+		return numTraitsLearnable
+	end,
+	['artifactpower:traits_learned'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, _, traitsLearned = C_ArtifactUI.GetEquippedArtifactInfo()
+		return traitsLearned
+	end,
+	['artifactpower:tier'] = function()
+		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
+		local _, _, _, _, _, _, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
+		return tier
+	end
+} do
+	oUF.Tags.Methods[tag] = func
+	oUF.Tags.Events[tag] = "ARTIFACT_XP_UPDATE UNIT_INVENTORY_CHANGED"
+end
+
 --[[ Override: ArtifactPower:OnEnter()
 Called when the mouse cursor enters the widget's interactive area.
 
