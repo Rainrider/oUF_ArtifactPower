@@ -62,7 +62,7 @@ for tag, func in next, {
 		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
 		local _, _, _, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local _, power, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier)
-		return AbbreviateLargeNumbers(powerForNextTrait - power)
+		return powerForNextTrait - power
 	end,
 	['artifactpower:until_next_per'] = function()
 		if not HasArtifactEquipped() or UnitHasVehicleUI('player') then return end
