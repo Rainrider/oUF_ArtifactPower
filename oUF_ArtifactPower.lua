@@ -197,9 +197,13 @@ local function Enable(self, unit)
 	element.__owner = self
 	element.ForceUpdate = ForceUpdate
 
-	if (element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
-		element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
-		element:SetStatusBarColor(.901, .8, .601)
+	if (element:IsObjectType('StatusBar')) then
+		if (not element:GetStatusBarTexture()) then
+			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		end
+		if (not element:GetStatusBarColor()) then
+			element:SetStatusBarColor(.901, .8, .601)
+		end
 	end
 
 	if (element:IsMouseEnabled()) then
