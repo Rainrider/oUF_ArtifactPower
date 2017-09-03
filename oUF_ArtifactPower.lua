@@ -9,6 +9,7 @@ ArtifactPower - a `StatusBar` used to display the player's artifact power
 
 ## Options
 
+.color         - a table containing the RGB values for the widget. Defaults to {.901, .8, .601} (table)
 .onAlpha       - alpha value of the widget when it is mouse-enabled and hovered. Defaults to 1 (number)[0-1]
 .offAlpha      - alpha value of the widget when it is mouse-enabled and not hovered. Defaults to 1 (number)[0-1]
 .tooltipAnchor - anchor point for the tooltip. Defaults to 'ANCHOR_BOTTOMRIGHT' (string)
@@ -201,9 +202,8 @@ local function Enable(self, unit)
 		if (not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
-		if (not element:GetStatusBarColor()) then
-			element:SetStatusBarColor(.901, .8, .601)
-		end
+		local color = element.color or {.901, .8, .601}
+		element:SetStatusBarColor(unpack(color))
 	end
 
 	if (element:IsMouseEnabled()) then
