@@ -1,0 +1,16 @@
+sudo: false
+language: bash
+
+branches:
+  only:
+  - master
+  - /^\d+\.\d+\.\d+(-\S*)?$/
+
+addons:
+  apt:
+    packages:
+    - luarocks
+    - pandoc
+
+before-script: "./.release/changelog > CHANGELOG.md"
+script: bash ./.release/release.sh

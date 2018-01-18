@@ -1,1 +1,4 @@
 package-as: oUF_ArtifactPower
+
+ignore:
+  - README.md
