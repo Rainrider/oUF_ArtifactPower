@@ -3,7 +3,6 @@ language: bash
 
 branches:
   only:
-  - master
   - /^\d+\.\d+\.\d+(-\S*)?$/
 
 addons:
