@@ -11,5 +11,5 @@ addons:
     - luarocks
     - pandoc
 
-before-script: "./.release/changelog > CHANGELOG.md"
+before_script: "./.release/changelog > CHANGELOG.md"
 script: bash ./.release/release.sh
