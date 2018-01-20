@@ -8,8 +8,11 @@ branches:
 addons:
   apt:
     packages:
-    - luarocks
+    - lua5.1
     - pandoc
 
-before_script: "./.release/changelog > CHANGELOG.md"
-script: bash ./.release/release.sh
+before_script: lua .release/changelog > CHANGELOG.md
+
+script:
+- curl -s https://raw.githubusercontent.com/Rainrider/packager/wowace/release.sh -o .release/release.sh
+- bash .release/release.sh
