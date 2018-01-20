@@ -33,9 +33,9 @@ are not set by the layout.
 ## Examples
 
     -- Position and size
-    local ArtifactPower = CreateFrame("StatusBar", nil, self)
+    local ArtifactPower = CreateFrame('StatusBar', nil, self)
     ArtifactPower:SetSize(200, 5)
-    ArtifactPower:SetPoint("TOP", self, "BOTTOM")
+    ArtifactPower:SetPoint('TOP', self, 'BOTTOM')
 
     -- Enable the tooltip
     ArtifactPower:EnableMouse(true)
@@ -69,7 +69,7 @@ for tag, func in next, {
 		if (not HasArtifactEquipped() or UnitHasVehicleUI('player')) then return end
 		local _, _, _, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local _, power, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier)
-		return floor(((power / powerForNextTrait) * 100) + 0.5)
+		return math.floor(((power / powerForNextTrait) * 100) + 0.5)
 	end,
 	['artifactpower:next_trait_cost'] = function()
 		if (not HasArtifactEquipped() or UnitHasVehicleUI('player')) then return end
@@ -100,7 +100,7 @@ for tag, func in next, {
 	end
 } do
 	oUF.Tags.Methods[tag] = func
-	oUF.Tags.Events[tag] = "ARTIFACT_XP_UPDATE UNIT_INVENTORY_CHANGED"
+	oUF.Tags.Events[tag] = 'ARTIFACT_XP_UPDATE UNIT_INVENTORY_CHANGED'
 end
 
 --[[ Override: ArtifactPower:OnEnter()
@@ -112,7 +112,7 @@ local function OnEnter(element)
 	element:SetAlpha(element.onAlpha)
 	GameTooltip:SetOwner(element, element.tooltipAnchor)
 	GameTooltip:SetText(element.name, HIGHLIGHT_FONT_COLOR:GetRGB())
-	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine(' ')
 	GameTooltip:AddLine(ARTIFACT_POWER_TOOLTIP_TITLE:format(AbbreviateLargeNumbers(element.totalPower),
 	                                                        AbbreviateLargeNumbers(element.power),
 	                                                        AbbreviateLargeNumbers(element.powerForNextTrait)),
@@ -128,7 +128,7 @@ Called when the mouse cursor leaves the widget's interactive area.
 --]]
 local function OnLeave(element)
 	element:SetAlpha(element.offAlpha)
-	GameTooltip_Hide()
+	GameTooltip:Hide()
 end
 
 local function Update(self, event, unit)
@@ -146,7 +146,8 @@ local function Update(self, event, unit)
 	local show = HasArtifactEquipped() and not UnitHasVehicleUI('player')
 	if (show) then
 		local _, _, name, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
-		local numTraitsLearnable, power, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier);
+		local numTraitsLearnable, power, powerForNextTrait
+			= MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower, tier);
 
 		element:SetMinMaxValues(0, powerForNextTrait)
 		element:SetValue(power)
