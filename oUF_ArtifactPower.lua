@@ -30,6 +30,8 @@ ArtifactPower - a `StatusBar` used to display the player's artifact power
 A default texture will be applied if the widget is a `StatusBar` and doesn't have a texture or color set.
 `OnEnter` and `OnLeave` handlers to display a tooltip will be set on the widget if it is mouse-enabled and the scripts
 are not set by the layout.
+`OnMouseUp` handler to show the artifact UI will be set on the widget if it is mouse-enabled and the script is not set
+by the layout.
 
 ## Examples
 
@@ -130,6 +132,15 @@ Called when the mouse cursor leaves the widget's interactive area.
 local function OnLeave(element)
 	element:SetAlpha(element.offAlpha)
 	GameTooltip:Hide()
+end
+
+--[[ Override: ArtifactPower:OnMouseUp()
+Called to show the artifact UI if the widget is mouse-enabled and has been clicked
+
+* self - the ArtifactPower widget (StatusBar)
+--]]
+local function OnMouseUp()
+	SocketInventoryItem(INVSLOT_MAINHAND)
 end
 
 --[[ Override: ArtifactPower:UpdateColor(isUsable)
@@ -236,6 +247,9 @@ local function Enable(self, unit)
 		end
 		if (not element:GetScript('OnLeave')) then
 			element:SetScript('OnLeave', element.OnLeave or OnLeave)
+		end
+		if (not element:GetScript('OnMouseUp')) then
+			element:SetScript('OnMouseUp', element.OnMouseUp or OnMouseUp)
 		end
 	end
 
