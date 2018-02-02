@@ -9,10 +9,11 @@ ArtifactPower - a `StatusBar` used to display the player's artifact power
 
 ## Options
 
-.color         - a table containing the RGB values for the widget. Defaults to {.901, .8, .601} (table)
+.color         - the RGB values for the widget. Defaults to {.901, .8, .601} (table)
 .onAlpha       - alpha value of the widget when it is mouse-enabled and hovered. Defaults to 1 (number)[0-1]
 .offAlpha      - alpha value of the widget when it is mouse-enabled and not hovered. Defaults to 1 (number)[0-1]
 .tooltipAnchor - anchor point for the tooltip. Defaults to 'ANCHOR_BOTTOMRIGHT' (string)
+.unusableColor - the RGB values for the widget when the equipped artifact is unusable. Defaults to {1, 0, 0} (table)
 
 ## Attributes
 
@@ -131,6 +132,17 @@ local function OnLeave(element)
 	GameTooltip:Hide()
 end
 
+--[[ Override: ArtifactPower:UpdateColor(isUsable)
+Used to update the widget's color based whether the equipped artifact is usable.
+
+* self     - the ArtifactPower widget (StatusBar)
+* isUsable - indicates whether the equipped artifact is usable (boolean)
+--]]
+local function UpdateColor(element, isUsable)
+	local color = isUsable and element.color or element.unusableColor
+	element:SetStatusBarColor(unpack(color))
+end
+
 local function Update(self, event, unit)
 	if (unit and unit ~= self.unit) then return end
 
@@ -143,6 +155,7 @@ local function Update(self, event, unit)
 	--]]
 	if (element.PreUpdate) then element:PreUpdate(event) end
 
+	local isUsable = false
 	local show = HasArtifactEquipped() and not UnitHasVehicleUI('player')
 	if (show) then
 		local _, _, name, _, totalPower, traitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
@@ -160,6 +173,9 @@ local function Update(self, event, unit)
 		element.traitsLearned = traitsLearned
 		element.tier = tier
 
+		isUsable = not GetInventoryItemEquippedUnusable('player', INVSLOT_MAINHAND)
+		element:UpdateColor(isUsable)
+
 		element:Show()
 	else
 		element:Hide()
@@ -168,12 +184,13 @@ local function Update(self, event, unit)
 	--[[ Callback: ArtifactPower:PostUpdate(event, show)
 	Called after the element has been updated.
 
-	* self  - the ArtifactPower widget (StatusBar)
-	* event - the event that triggered the update (string)
-	* show  - true if the element is shown, false else (boolean)
+	* self     - the ArtifactPower widget (StatusBar)
+	* event    - the event that triggered the update (string)
+	* isShown  - indicates whether the element is shown (boolean)
+	* isUsable - indicates whether the equipped artifact is usable (boolean)
 	--]]
 	if (element.PostUpdate) then
-		return element:PostUpdate(event, show)
+		return element:PostUpdate(event, show, isUsable)
 	end
 end
 
@@ -203,9 +220,11 @@ local function Enable(self, unit)
 		if (not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
-		local color = element.color or {.901, .8, .601}
-		element:SetStatusBarColor(unpack(color))
 	end
+
+	element.color = element.color or {.901, .8, .601}
+	element.unusableColor = element.unusableColor or {1, 0, 0}
+	element.UpdateColor = element.UpdateColor or UpdateColor
 
 	if (element:IsMouseEnabled()) then
 		element.tooltipAnchor = element.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'

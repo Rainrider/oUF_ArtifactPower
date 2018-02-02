@@ -6,11 +6,11 @@ ignore = {
 
 read_globals = {
 	-- CONSTANTS
-	'ARTIFACT_POWER_TOOLTIP_BODY', 'ARTIFACT_POWER_TOOLTIP_TITLE', 'HIGHLIGHT_FONT_COLOR',
+	'ARTIFACT_POWER_TOOLTIP_BODY', 'ARTIFACT_POWER_TOOLTIP_TITLE', 'HIGHLIGHT_FONT_COLOR', 'INVSLOT_MAINHAND'
 
 	-- API
-	'AbbreviateLargeNumbers', 'HasArtifactEquipped', 'MainMenuBar_GetNumArtifactTraitsPurchasableFromXP',
-	'UnitHasVehicleUI',
+	'AbbreviateLargeNumbers', 'GetInventoryItemEquippedUnusable', 'HasArtifactEquipped',
+	'MainMenuBar_GetNumArtifactTraitsPurchasableFromXP', 'UnitHasVehicleUI',
 
 	-- Widgets
 	'GameTooltip',
