@@ -109,7 +109,7 @@ end
 --[[ Override: ArtifactPower:OnEnter()
 Called when the mouse cursor enters the widget's interactive area.
 
-* self - the ArtifactPower widget (StatusBar)
+* self - the ArtifactPower widget
 --]]
 local function OnEnter(element)
 	element:SetAlpha(element.onAlpha)
@@ -124,10 +124,10 @@ local function OnEnter(element)
 	GameTooltip:Show()
 end
 
---[[ Override: ArtifactPower:OnEnter()
+--[[ Override: ArtifactPower:OnLeave()
 Called when the mouse cursor leaves the widget's interactive area.
 
-* self - the ArtifactPower widget (StatusBar)
+* self - the ArtifactPower widget
 --]]
 local function OnLeave(element)
 	element:SetAlpha(element.offAlpha)
@@ -137,7 +137,7 @@ end
 --[[ Override: ArtifactPower:OnMouseUp()
 Called to show the artifact UI if the widget is mouse-enabled and has been clicked
 
-* self - the ArtifactPower widget (StatusBar)
+* self - the ArtifactPower widget
 --]]
 local function OnMouseUp()
 	SocketInventoryItem(INVSLOT_MAINHAND)
@@ -146,7 +146,7 @@ end
 --[[ Override: ArtifactPower:UpdateColor(isUsable)
 Used to update the widget's color based whether the equipped artifact is usable.
 
-* self     - the ArtifactPower widget (StatusBar)
+* self     - the ArtifactPower widget
 * isUsable - indicates whether the equipped artifact is usable (boolean)
 --]]
 local function UpdateColor(element, isUsable)
@@ -161,7 +161,7 @@ local function Update(self, event, unit)
 	--[[ Callback: ArtifactPower:PreUpdate(event)
 	Called before the element has been updated.
 
-	* self  - the ArtifactPower widget (StatusBar)
+	* self  - the ArtifactPower widget
 	* event - the event that triggered the update (string)
 	--]]
 	if (element.PreUpdate) then element:PreUpdate(event) end
@@ -192,10 +192,10 @@ local function Update(self, event, unit)
 		element:Hide()
 	end
 
-	--[[ Callback: ArtifactPower:PostUpdate(event, show)
+	--[[ Callback: ArtifactPower:PostUpdate(event, isShown, isUsable)
 	Called after the element has been updated.
 
-	* self     - the ArtifactPower widget (StatusBar)
+	* self     - the ArtifactPower widget
 	* event    - the event that triggered the update (string)
 	* isShown  - indicates whether the element is shown (boolean)
 	* isUsable - indicates whether the equipped artifact is usable (boolean)
@@ -206,11 +206,11 @@ local function Update(self, event, unit)
 end
 
 local function Path(self, ...)
-	--[[ Override: ArtifactPower:Override(event, ...)
-	Used to completely override the element's update process.
+	--[[ Override: ArtifactPower.Override(event, ...)
+	Used to override the element's update process.
 
-	* self  - the ArtifactPower widget
-	* event - the event that triggered the update
+	* self  - the parent of the ArtifactPower widget
+	* event - the event that triggered the update (string)
 	* ...   - the arguments accompanying the event
 	--]]
 	return (self.ArtifactPower.Override or Update)(self, ...)
