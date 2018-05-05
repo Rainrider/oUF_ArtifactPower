@@ -15,6 +15,14 @@ ArtifactPower - a `StatusBar` used to display the player's artifact power
 .tooltipAnchor - anchor point for the tooltip. Defaults to 'ANCHOR_BOTTOMRIGHT' (string)
 .unusableColor - the RGB values for the widget when the equipped artifact is unusable. Defaults to {1, 0, 0} (table)
 
+## Attributes
+
+.current            - the amount of artifact power gained towards the next artifact level/trait (number?)
+.max                - the total amount of artifact power needed for the next artifact level/trait (number?)
+.level              - the current artifact level or the sum of learned and learnable traits (number?)
+.unspentPower       - the amount of unspent artifact power (number?)
+.numTraitsLearnable - the number of learnable traits based on the amount of unspent artifact power (number?)
+
 ## Notes
 
 A default texture will be applied if the widget is a `StatusBar` and doesn't have a texture or color set.
