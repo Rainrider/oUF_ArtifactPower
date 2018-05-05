@@ -1,6 +1,7 @@
 std = 'lua51'
 
 ignore = {
+	'431', -- upvalue shadowing
 	'631', -- Line is too long
 }
 
