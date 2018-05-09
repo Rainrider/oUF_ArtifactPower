@@ -242,7 +242,8 @@ local function UpdateColor(element, isUsable)
 	element:SetStatusBarColor(unpack(color))
 end
 
-local function Update(self, event, unit)
+local function Update(self, event, arg)
+	local unit = type(arg) == 'string' and arg
 	if (unit and unit ~= self.unit) then return end
 	local element = self.ArtifactPower
 
