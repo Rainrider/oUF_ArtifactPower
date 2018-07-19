@@ -1,8 +1,8 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: oUF ArtifactPower
 ## Author: Rainrider
 ## Version: @project-version@
-## Notes: Artifact power bar support for oUF layouts.
+## Notes: Artifact/Azerite power bar support for oUF layouts.
 ## RequiredDeps: oUF
 
 ## X-Curse-Project-ID: 100339
