@@ -23,7 +23,7 @@ read_globals = {
 	-- Namespaces
 	C_ArtifactUI = {
 		fields = {
-			'GetCostForPointAtRank', 'GetEquippedArtifactInfo',
+			'GetCostForPointAtRank', 'GetEquippedArtifactInfo', 'IsEquippedArtifactDisabled',
 		},
 	},
 	C_AzeriteItem = {
