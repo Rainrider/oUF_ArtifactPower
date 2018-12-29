@@ -275,6 +275,9 @@ local function Update(self, event, arg)
 			element.unspentPower = unspentPower
 			show = true
 		elseif (azeriteItemLocation) then
+			element.numTraitsLearnable = nil
+			element.unspentPower = nil
+
 			current, max = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
 			level = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
 			show = true
