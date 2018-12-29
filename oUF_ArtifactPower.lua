@@ -71,9 +71,8 @@ for tag, func in next, {
 		if (not UnitHasVehicleUI('player')) then
 			local azeriteItemLocation = C_AzeriteItem and C_AzeriteItem.FindActiveAzeriteItem()
 			if (HasArtifactEquipped() and not C_ArtifactUI.IsEquippedArtifactDisabled()) then
-				local _, _, _, _, unspentPower, numTraitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
-				local _, power = GetNumTraitsLearnable(numTraitsLearned, unspentPower, tier)
-				return power
+				local _, _, name = C_ArtifactUI.GetEquippedArtifactInfo()
+				return name
 			elseif (azeriteItemLocation) then
 				local link = GetInventoryItemLink('player', azeriteItemLocation.equipmentSlotIndex)
 				return link and link:match('%[(.+)%]')
@@ -198,7 +197,10 @@ local function OnEnter(element)
 		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
 		ItemDataLoadedCancelFunc = azeriteItem:ContinueWithCancelOnItemLoad(function()
 			GameTooltip:SetOwner(element, element.tooltipAnchor)
-			GameTooltip:SetText(AZERITE_POWER_TOOLTIP_TITLE:format(element.level, element.max - element.current), HIGHLIGHT_FONT_COLOR:GetRGB())
+			GameTooltip:SetText(
+				AZERITE_POWER_TOOLTIP_TITLE:format(element.level, element.max - element.current),
+				HIGHLIGHT_FONT_COLOR:GetRGB()
+			)
 			GameTooltip:AddLine(AZERITE_POWER_TOOLTIP_BODY:format(azeriteItem:GetItemName()))
 			GameTooltip:Show()
 		end)
