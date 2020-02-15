@@ -5,11 +5,11 @@ on:
   # pushing semantic versioning tags or to the master branch
   push:
     tags:
-    - [0-9]+.[0-9]+.[0-9]+
+    - '[0-9]+.[0-9]+.[0-9]+'
     branches:
     - master
   # issuing pull request against the master branch
-  pull_requst:
+  pull_request:
     branches:
     - master
 
