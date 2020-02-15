@@ -1,0 +1,44 @@
+name: CI
+
+# run on
+on:
+  # pushing semantic versioning tags or to the master branch
+  push:
+    tags:
+    - '[0-9]+.[0-9]+.[0-9]+'
+    branches:
+    - master
+  # issuing pull request against the master branch
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Lua and LuaRocks
+      run: |
+        sudo apt-get -q update
+        sudo apt-get -qy install lua5.1 luarocks
+        eval `luarocks path`
+    - name: Install LuaCheck
+      run: luarocks --local install luacheck
+    - name: Lint
+      run: $HOME/.luarocks/bin/luacheck .
+    # Deploy tags only
+    # Use the same job to keep the same virtual env
+    - name: Create the changelog
+      if: startsWith(github.ref, 'refs/tags/')
+      run: lua .release/changelog > CHANGELOG.md
+    - name: Deploy
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        CF_API_KEY: ${{ secrets.CF_API_KEY }}
+        WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+      run: |
+        sudo apt-get -qy install pandoc
+        curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh -o .release/release.sh
+        bash .release/release.sh
