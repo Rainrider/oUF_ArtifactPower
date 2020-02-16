@@ -12,7 +12,7 @@ read_globals = {
 
 	-- API
 	'AbbreviateLargeNumbers', 'CreateColor', 'GetInventoryItemEquippedUnusable', 'GetInventoryItemLink',
-	'HasArtifactEquipped', 'SocketInventoryItem', 'UnitHasVehicleUI',
+	'HasArtifactEquipped', 'OpenAzeriteEssenceUIFromItemLocation', 'SocketInventoryItem', 'UnitHasVehicleUI',
 
 	-- Widgets
 	'GameTooltip',

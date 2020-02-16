@@ -222,14 +222,18 @@ local function OnLeave(element)
 end
 
 --[[ Override: ArtifactPower:OnMouseUp()
-Used to show the artifact UI if the widget is mouse-enabled and has been clicked.
-Only functions when a Legion artifact is equipped.
+Used to show the artifact or azerite essence UI if the widget is mouse-enabled
+and has been clicked.
 
 * self - the ArtifactPower widget
 --]]
 local function OnMouseUp()
+	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem();
+
 	if (HasArtifactEquipped()) then
 		SocketInventoryItem(INVSLOT_MAINHAND)
+	elseif (azeriteItemLocation) then
+		OpenAzeriteEssenceUIFromItemLocation(azeriteItemLocation)
 	end
 end
 
