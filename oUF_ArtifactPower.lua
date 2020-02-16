@@ -50,7 +50,7 @@ local oUF = ns.oUF or oUF
 
 local ARTIFACT_BAR_COLOR = ARTIFACT_BAR_COLOR or CreateColor(0.901, 0.8, 0.601, 1)
 
-local ItemDataLoadedCancelFunc, azeriteItemLocation
+local ItemDataLoadedCancelFunc
 
 local function GetNumTraitsLearnable(numTraitsLearned, power, tier)
 	local numPoints = 0;
@@ -179,6 +179,8 @@ Called when the mouse cursor enters the widget's interactive area.
 local function OnEnter(element)
 	element:SetAlpha(element.onAlpha)
 
+	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+
 	if (HasArtifactEquipped() and not C_ArtifactUI.IsEquippedArtifactDisabled()) then
 		local _, _, name = C_ArtifactUI.GetEquippedArtifactInfo()
 		GameTooltip:SetOwner(element, element.tooltipAnchor)
@@ -266,7 +268,7 @@ local function Update(self, event, arg)
 	local current, max, level, show
 	local isUsable = true
 	if (not UnitHasVehicleUI('player')) then
-		azeriteItemLocation = C_AzeriteItem and C_AzeriteItem.FindActiveAzeriteItem()
+		local azeriteItemLocation = C_AzeriteItem and C_AzeriteItem.FindActiveAzeriteItem()
 		if (HasArtifactEquipped() and not C_ArtifactUI.IsEquippedArtifactDisabled()) then
 			local _, _, _, _, unspentPower, numTraitsLearned, _, _, _, _, _, _, tier = C_ArtifactUI.GetEquippedArtifactInfo()
 			local numTraitsLearnable, power, powerForNextTrait = GetNumTraitsLearnable(numTraitsLearned, unspentPower, tier)
