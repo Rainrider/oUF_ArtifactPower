@@ -232,7 +232,7 @@ and has been clicked.
 local function OnMouseUp()
 	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem();
 
-	if (HasArtifactEquipped()) then
+	if (HasArtifactEquipped() and not C_ArtifactUI.IsEquippedArtifactDisabled()) then
 		SocketInventoryItem(INVSLOT_MAINHAND)
 	elseif (azeriteItemLocation) then
 		OpenAzeriteEssenceUIFromItemLocation(azeriteItemLocation)
