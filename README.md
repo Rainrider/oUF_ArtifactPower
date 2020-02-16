@@ -7,10 +7,11 @@ It requires a oUF layout that supports it.
 
 ## Features
 
-  - Shows the artifact power for the currently equipped artifact weapon as a status bar.
-  - Optionally shows a tooltip when hovered, containing the name of the currently equipped artifact as well as the unspent, current and remaining power until the next trait can be purchased. The tooltip also tells how many traits are purchasable with the unspent artifact power.
+  - Shows the current artifact/azerite power as a status bar.
+  - Prioritizes the [Underlight Angler](https://www.wowhead.com/item=133755/underlight-angler) over the [Hearth of Azeroth](https://www.wowhead.com/item=158075/heart-of-azeroth) if the former is equipped.
+  - Optionally show a tooltip when hovered.
   - Optionally fades the bar in and out if it is mouse enabled and the .onAlpha and .offAlpha options are set by the layout.
-  - Hides the bar if the player is in a vehicle or has no artifact equipped.
+  - Hides the bar if the player is in a vehicle, has no artifact equipped (or it is disabled) or does not possess the Hearth of Azeroth.
 
 ## How to use
 
