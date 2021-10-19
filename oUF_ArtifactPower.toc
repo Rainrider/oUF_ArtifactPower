@@ -1,4 +1,4 @@
-## Interface: 80300
+## Interface: 90100
 ## Title: oUF ArtifactPower
 ## Author: Rainrider
 ## Version: @project-version@
