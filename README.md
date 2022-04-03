@@ -1,5 +1,10 @@
 # oUF ArtifactPower
 
+## Archived
+
+Since artifacts with the exeption of [Underlight Angler](https://www.wowhead.com/item=133755/underlight-angler) stayed in Legion, there is no point of keeping this element as is. 
+Please consider using [oUF_Progress](https://github.com/Rainrider/oUF_Progress) instead, which supports artifacts as well.
+
 ## Description
 
 oUF ArtifactPower is an element plug-in for the unitframe framework [oUF](http://www.wowinterface.com/downloads/info9994-oUF.html).  
